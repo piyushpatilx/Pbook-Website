@@ -1,12 +1,9 @@
 <html>
  <?php
- session_start();
+ require_once("login_check.php");
  require_once("header.html");
  require_once("nav.html");
- if(!isset($_SESSION['username'])){
-  header("Location: login.php");
- }
- require ("database_con.php");
+ require_once("database_con.php");
  ?>
 <style>
 body {
@@ -16,7 +13,12 @@ form {
  margin-top: 10px;
 }
 </style>
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" >
+<br><fieldset>
+<legend><em>Profile Edit</em></legend>
+<form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" >
+<input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
+    Choose Profile Picture: <input accept="image/jpeg" name="userfile" type="file" />
+<br>
 Birth Date:<input type=date name=birthdate /><br>
 Gender:
 Male<input type=radio value=Male name=gender />
@@ -28,18 +30,29 @@ Relationship Status:
 <option value=Married >Married</option>
 </select><br>
 Intrested in:<br>
-<textarea name=interest rows=7 columns=10 maxlength="29" ></textarea>
-<a href="profile.php"><input type="submit" value="Save" name="submit" /></a>
+<textarea name=interest rows=4 cols=30 maxlength="100" ></textarea>
+<br><a href="profile.php"><input type="submit" value="Save" name="submit" /></a>
 </form>
+</fieldset>
 <?php 
 if($_POST['submit']){
 $username = $_SESSION['username'];
-$birthdate = trim($_POST['birthdate']);
-$gender = trim($_POST['gender']);
+$birthdate = htmlspecialchars(trim($_POST['birthdate']));
+$gender = htmlspecialchars(trim($_POST['gender']));
 
-$relationship = trim($_POST['relationship']);
+$uploaddir = 'images/';
+$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+$file = basename($_FILES['userfile']['name']);
+if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+    echo "Profile was successfully uploaded. <br>";
+    
+} else {
+    echo "Profile upload failed!.\n";
+  }
 
-$interest = trim($_POST['interest']);
+$relationship = htmlspecialchars(trim($_POST['relationship']));
+
+$interest = htmlspecialchars(trim($_POST['interest']));
 
 $check = "SELECT `Username` FROM `Profile` WHERE `Username` = '$username'";
 
@@ -65,9 +78,12 @@ mysqli_query($dbc,$q4) or die("Error q4");
 if(!empty($interest)) {
 $q5 = "UPDATE `Profile` SET `Interest` = '$interest' WHERE `Username` = '$username'";
 mysqli_query($dbc,$q5) or die("Error q5");
-mysqli_close($dbc);
+}
+if(!empty($file)) {
+$q6 = "UPDATE `Profile` SET `Photo` = '$uploadfile' WHERE `Username` = '$username'";
+mysqli_query($dbc,$q6) or die("Error q6");
+}
 header("Location: profile.php");
-  }
 }
 mysqli_close($dbc);
 require_once("footer.html");

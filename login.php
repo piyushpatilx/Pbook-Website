@@ -1,9 +1,10 @@
-<?php require_once("header.html");
-require("database_con.php");
+<?php
+require_once("header.html");
+require_once("database_con.php");
 require_once("nav.html"); ?>
 <style>
-#lg {
-		font-family: Comic Sans MS;
+fieldset {
+		font-family: Georgia;
 	}
 #error {
 	color: red;
@@ -11,8 +12,8 @@ require_once("nav.html"); ?>
 </style>
 <fieldset>
 <?php
-$email = trim($_POST['email']);
-$password = trim($_POST['password']);
+$email = htmlspecialchars(trim($_POST['email']));
+$password = htmlspecialchars(trim($_POST['password']));
 $error = array();
 if(isset($_POST['submit'])){
 if (empty($email)){
@@ -24,35 +25,32 @@ if(empty($password)){
 if(empty($error)){
 	$q = "SELECT `Password`,`Username` FROM `Userdata` WHERE `Email`='$email' LIMIT 1";
 	$check = mysqli_query($dbc, $q) or die("Error querying database");
-	if(empty($check)){
+ $result = mysqli_fetch_array($check);
+	if(empty($result)){
 		array_push($error, "Account does not exist</br>");
 		}
-	if(!empty($check)){
-		$result = mysqli_fetch_array($check);
-			if($password!=$result[0]){
+	if(!empty($result)){
+				if($password!=$result[0]){
 				array_push($error, "Incorrect Password</br>");
 			}			
 		}
 	if (empty($error)){
 		session_start();
 		$_SESSION['username'] = $result[1];
-		$_SESSION['email'] = $email;
-		$_SESSION['password'] = $password;
+		session_write_close();
 		header("Location: index.php");
 		}
 	}
 }
 ?>
-<legend><h2>Login</h2></legend>
+<legend><h4><em>Login</em></h4></legend>
 <em id=error><?php for($i=0;$i < count($error);$i++){ echo $error[$i]; } ?></em>
 <br>
-<b id=lg>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-Email:<input type="text" name="email" required/></br>
-Password:<input type="password" name="password" required/></br>
-<input type="submit" name="submit" value="Login"/><br><br>
+Email:<input type="email" maxlength="20" name="email" required/></br>
+Password:<input type="password" maxlength="10" name="password" required/></br>
+<br><input type="submit" name="submit" value="Login"/><br><br>
 Don't have an account, then <a href="register.php">create</a> one.
-</b>
 </form>
 </fieldset>
 <?php 

@@ -1,34 +1,24 @@
+<?php
+require_once("header.html");
+require_once("nav.html");
+require_once("database_con.php");
+ ?>
 <style>
 #error {
 	color: red;
 }
-#rg {
- font-family: Comic Sans MS;
-}
-form {
-	position: center;
-	}
-legend {
-font-size: 150%;
-font-style: italic;
-}
 fieldset {
-border-width: 6px;
+	font-family: Georgia;
 }
 </style>
-<?php require_once("header.html");
-require_once("nav.html");
-require("database_con.php");
- ?>
-<fieldset>
-<legend>Register</legend>
+
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" />
 <h3 id=error >
 <?php
-$username = trim($_POST['username']);
-$email = trim($_POST['email']);
-$password = trim($_POST['password']);
-$confirm = trim($_POST['confirm']);
+$username = htmlspecialchars(trim($_POST['username']));
+$email = htmlspecialchars(trim($_POST['email']));
+$password = htmlspecialchars(trim($_POST['password']));
+$confirm = htmlspecialchars(trim($_POST['confirm']));
 $error = array();
 
 //Check Submit is clicked or not?
@@ -65,25 +55,25 @@ if ($done==0){
 	$result = mysqli_query($dbc, $query) or die("Error Querying Database");
 	session_start();
 		$_SESSION['username'] = $username;
-		$_SESSION['email'] = $email;
-		$_SESSION['password'] = $password;
+  session_write_close();
 	header('Location: index.php');
 	 }
 	}
 }
 ?>
 </h3>
+<fieldset>
+<legend><h4><em>Register</em></h4></legend>
 <em id=error><?php for($i=0;$i < count($error);$i++){ echo $error[$i]; } ?></em>
 <br>
-<b id=rg>
-  Username:<input type="text" name="username"  maxlength=12 required/><br>
-  Email:<input type="email" name="email" required/><br>
-  Create-Password:<input type="password" name="password" required/><br>
-  Confirm-Password:<input type="password" name="confirm" required/><br>
+  Username:<input type="text" name="username"  maxlength="10" required/><br>
+  Email:<input type="email" maxlength="20" name="email" required/><br>
+  Create-Password:<input type="password" maxlength="10" name="password" required/><br>
+  Confirm-Password:<input type="password" maxlength="10" name="confirm" required/><br>
+  <br>
   <input type="submit" name="submit" value="Register"/><br><br>
   
   Already have an account ?, then <a href="login.php">login</a>.<br>
-  </b>
 </form>
 </fieldset>
 <?php 
