@@ -11,18 +11,18 @@ fieldset {
 	font-family: Georgia;
 }
 </style>
-
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" />
 <h3 id=error >
 <?php
-$username = htmlspecialchars(trim($_POST['username']));
-$email = htmlspecialchars(trim($_POST['email']));
-$password = htmlspecialchars(trim($_POST['password']));
-$confirm = htmlspecialchars(trim($_POST['confirm']));
-$error = array();
 
 //Check Submit is clicked or not?
+$error = array();
 if(!empty($_POST['submit'])){
+$username = $_POST['username'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$confirm = $_POST['confirm'];
+
 if(empty($username)){
 	array_push($error,"Username cannot be empty</br>");
 }
@@ -35,7 +35,7 @@ if ($password != $confirm) {
 	}
 
 //Register User
-if ($done==0){
+if (empty($error)){
 	$verify_name = "SELECT `Username` FROM `Userdata` WHERE `Username`='$username'";
 	$verify_email = "SELECT `Username` FROM `Userdata` WHERE `Email`='$email'";
 	$check = mysqli_query($dbc, $verify_name) or die(mysqli_error($dbc));
@@ -56,7 +56,7 @@ if ($done==0){
 	session_start();
 		$_SESSION['username'] = $username;
   session_write_close();
-	header('Location: index.php');
+	header('Location: profile-edit.php');
 	 }
 	}
 }
@@ -66,10 +66,11 @@ if ($done==0){
 <legend><h4><em>Register</em></h4></legend>
 <em id=error><?php for($i=0;$i < count($error);$i++){ echo $error[$i]; } ?></em>
 <br>
-  Username:<input type="text" name="username"  maxlength="10" required/><br>
-  Email:<input type="email" maxlength="20" name="email" required/><br>
-  Create-Password:<input type="password" maxlength="10" name="password" required/><br>
-  Confirm-Password:<input type="password" maxlength="10" name="confirm" required/><br>
+<b>We recommend, do not use your real name and email for privacy concerns.😇</b><br><br>
+  Username:<input type="text" name="username"  maxlength="10" placeholder="Fake Name" required/><br>
+  Email:<input type="email" maxlength="20" name="email" placeholder="fake@email.com" required/><br>
+  Create-Password:<input type="password" maxlength="10" name="password" placeholder="Password" required/><br>
+  Confirm-Password:<input type="password" maxlength="10" name="confirm" placeholder="Password" required/><br>
   <br>
   <input type="submit" name="submit" value="Register"/><br><br>
   

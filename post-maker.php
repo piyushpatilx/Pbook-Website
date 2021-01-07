@@ -5,18 +5,23 @@ require_once("nav.html");
 require_once("database_con.php");
 
 if(isset($_POST['submit-post'])){
-$article = htmlspecialchars(trim($_POST['post-article']));
+$article = $_POST['post-article'];
 $error = array();
 $username = $_SESSION['username'];
 
+//images
 $uploaddir = 'images/';
-$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-$file = basename($_FILES['userfile']['name']);
-if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
+$file_name = tempnam($uploaddir,0);
+$uploadfile = substr($file_name, -14, strlen($file_name)).".jpg";
+$file = basename($_FILES['image']['name']);
+if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
     echo "Post was successfully uploaded. <br>";
+    unlink(substr($file_name, -14, strlen($file_name)));
 } else {
-    echo "Post upload failed!.\n";
+   unlink(substr($file_name, -14, strlen($file_name)));
+   echo "Post upload failed!.\n";
   }
+
 
 if(empty($article)){
 	array_push($error,"Article cannot be empty");
@@ -24,10 +29,10 @@ if(empty($article)){
 if(empty($error)){
 	$date = date('M d Y h:i a');
 	if(empty($file)){
-	$query = "INSERT INTO `Posts`(`Date`,`From`,`Post`) VALUES('$date','$username','$article')";
+	$query = "INSERT INTO `Posts`(`date`,`from`,`post`) VALUES('$date','$username','$article')";
 	}
 	else {
-$query = "INSERT INTO `Posts`(`Date`,`From`,`Post`,`Photo`) VALUES('$date','$username','$article','$uploadfile')";
+$query = "INSERT INTO `Posts`(`date`,`from`,`post`,`photo`) VALUES('$date','$username','$article','$uploadfile')";
 	}
 	$q = mysqli_query($dbc, $query) or die("Error querying database".mysqli_error($dbc));
 	mysqli_close($dbc);
@@ -39,13 +44,17 @@ $query = "INSERT INTO `Posts`(`Date`,`From`,`Post`,`Photo`) VALUES('$date','$use
   		echo $error[$i]."<br>";
   	  }
   	}
-}
+  }
+
 ?>
+
 <form enctype="multipart/form-data" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 <br><fieldset>
 <legend><em>Create Post</em></legend>
 <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
-Upload Photo: <input name="userfile" accept="image/jpeg" type="file" />
+<fieldset>
+<legend>Upload Photo</legend><input name="image" accept="image/jpeg" type="file" />
+</fieldset>
 Text: <textarea rows="7" maxlength="499" cols="30" name="post-article" required>
 </textarea>
 <input type="submit" value="Post" name="submit-post"/>

@@ -30,7 +30,9 @@ border-bottom-left-radius: 20px;
    font-family: Monospace;
 	 }
 </style>
+
 <br><a href="chat-send.php"><button>Start Chat</button></a><br>
+
 <?php
 $username = $_SESSION['username'];
 $query = "SELECT * FROM `Chats` WHERE `receiver` = '$username'";
@@ -48,7 +50,8 @@ while($q = mysqli_fetch_array($result)){
 	<?php echo $q['sender']; ?></a>
  At: <?php echo $q['time']; ?></em>
 <hr>
-<?php echo $q['chat'] ?><br>
+<?php echo nl2br($q['chat']); ?><br>
+
 </fieldset>
 <?php 
 }
@@ -63,9 +66,20 @@ while($q2 = mysqli_fetch_array($result2)){
 	</a>
    At: <?php echo $q2['time']; ?></em>
 <hr>
-<?php echo $q2['chat'] ?><br>
+<?php echo nl2br($q2['chat']); ?><br><hr>
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+	<input type="hidden" value="<?php echo $q2['id']; ?>" name='id' >
+	<input type="submit" value="x" name="del-chat" >
+</form>
 </fieldset>
 <?php 
 }
+if(isset($_POST['del-chat'])){
+	$id = $_POST['id'];
+	$qd = "delete from `Chats` where `id` = '$id'";
+	$er = mysqli_query($dbc ,$qd) or die("Error Cannot delete Message");
+	header("Location: chat.php");
+}
+
 mysqli_close($dbc);
 require_once("footer.html"); ?>

@@ -35,13 +35,13 @@ Intrested in:<br>
 </form>
 </fieldset>
 <?php 
-if($_POST['submit']){
+if(isset($_POST['submit'])){
 $username = $_SESSION['username'];
-$birthdate = htmlspecialchars(trim($_POST['birthdate']));
-$gender = htmlspecialchars(trim($_POST['gender']));
+$birthdate = $_POST['birthdate'];
+$gender = $_POST['gender'];
 
 $uploaddir = 'images/';
-$uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
+$uploadfile = $uploaddir . $username .".jpg";
 $file = basename($_FILES['userfile']['name']);
 if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
     echo "Profile was successfully uploaded. <br>";
@@ -50,9 +50,9 @@ if (move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile)) {
     echo "Profile upload failed!.\n";
   }
 
-$relationship = htmlspecialchars(trim($_POST['relationship']));
+$relationship = $_POST['relationship'];
 
-$interest = htmlspecialchars(trim($_POST['interest']));
+$interest = $_POST['interest'];
 
 $check = "SELECT `Username` FROM `Profile` WHERE `Username` = '$username'";
 

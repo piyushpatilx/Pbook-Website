@@ -1,8 +1,13 @@
-<html>
-<head>
-<body>
-	<title>Pbook</title>
-<style>
+<?php
+ob_start();
+$_GET   = filter_input_array(INPUT_GET, FILTER_SANITIZE_SPECIAL_CHARS);
+$_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+?>
+<!DOCTYPE HTML>
+<title>Pbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" /> 
+<style class=header>
 #header {
 background-color: #1460da;
 color: #ffffff;
@@ -14,18 +19,12 @@ border-color: silver;
 font-size: 60px;
 border-width: 6px;
 position: relative;
+border-radius: 6px;
 top: 5px;
 margin: 0px;
 }
 html {
-	width: 320px;
-	max-width: 320px;
+	margin: auto;
 }
- @media screen and (min-width: 330px) {
- 	html {
- 		zoom: 300%;
- 	}
-} 
 </style>
-</head>
 <h1 id=header>Pbook</h1>

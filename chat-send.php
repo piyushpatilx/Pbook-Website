@@ -9,8 +9,8 @@ require_once("database_con.php");
 <?php
 if(isset($_POST['send'])){
 $username = $_SESSION['username'];
-$to = htmlspecialchars(trim($_POST['to']));
-$message = htmlspecialchars(trim($_POST['message']));
+$to = trim($_POST['to']);
+$message = trim($_POST['message']);
 $error = array();
 
 if(empty($to)){
@@ -52,7 +52,7 @@ for($e=0;$e < count($error);$e++){
 <br><fieldset>
 <legend><em>Start Chat</em></legend>
   <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method=post >
- To:<input type=text maxlength="13" name=to value="<?php echo $_GET['name'] ?>" required />
+ To:<input type=text maxlength="13" name=to value="<?php if(isset($_GET['name'])){ echo $_GET['name']; } ?>" required />
   <input type=hidden maxlength="13" value="<?php echo $username ?>" name=from /><br>
   Chat:<br>
  <textarea rows=5 cols=30 required maxlength="399" name=message ></textarea>

@@ -8,7 +8,10 @@
  label  {
     font-family: Monospace;
   }
-  
+  #profile {
+    border-style: double;
+    border-width: 3px;
+  }
 </style>
 <?php
 $name = $_GET['name'];
@@ -24,7 +27,7 @@ $result = mysqli_fetch_array($r);
 <label>Profile Picture:</label><br>
 <?php 
 if(!empty($result['Photo'])){ ?>
-<img src="<?php echo $result['Photo']; ?>" height="200px" width="200px"><br>
+<img id=profile src="<?php echo $result['Photo']; ?>" height="200px" width="200px"><br>
 <?php } ?>
 <label>Birthdate: </label><?php echo $result['Birthdate']; ?><br>
 <label>Gender: </label><?php echo $result['Gender']; ?><br>

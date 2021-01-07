@@ -4,6 +4,12 @@ require_once("nav.html");
 require_once("login_check.php");
 require_once("database_con.php");
 ?>
+<style>
+  #profile {
+    border-style: double;
+    border-width: 3px;
+  }
+</style>
 <br>
 <form action="search-profile.php" method="get" >
 <input type=submit value=Search name=submit /><input type=search name=search_name placeholder="Search by Name"/>
@@ -24,7 +30,7 @@ if(!empty($search)){
 <legend><b><?php echo $result['Username']; ?></b></legend>
 Profile Picture:<br>
 <?php if(!empty($result['Photo'])){ ?>
-<img src="<?php echo $result['Photo']; ?>" height="200px" width="200px"><br>
+<img id=profile src="<?php echo $result['Photo']; ?>" height="200px" width="200px"><br>
 <?php } ?>
 Birthdate: <?php echo $result['Birthdate']; ?><br>
 Gender: <?php echo $result['Gender']; ?><br>

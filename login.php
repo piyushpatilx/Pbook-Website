@@ -1,4 +1,8 @@
 <?php
+session_start();
+if(isset($_SESSION['username'])){
+	header('Location: index.php');
+}
 require_once("header.html");
 require_once("database_con.php");
 require_once("nav.html"); ?>
@@ -10,12 +14,28 @@ fieldset {
 	color: red;
 }
 </style>
+<script src="./jquery.js" ></script>
+<script>
+	$(document).ready(function(){
+  var check = 0;
+ $('#ck').on('click', function(){
+	if(check == 0){
+	$('#pass').attr('type', 'text');
+	check = 1;
+	}
+else if(check == 1){
+	$('#pass').attr('type', 'password');
+	check = 0;
+	}
+	});
+});
+</script>
 <fieldset>
-<?php
-$email = htmlspecialchars(trim($_POST['email']));
-$password = htmlspecialchars(trim($_POST['password']));
+<?php 
 $error = array();
 if(isset($_POST['submit'])){
+$email = htmlspecialchars(trim($_POST['email']));
+$password = htmlspecialchars(trim($_POST['password']));
 if (empty($email)){
 	array_push($error ,"Email cannot be empty</br>");
 }
@@ -35,9 +55,9 @@ if(empty($error)){
 			}			
 		}
 	if (empty($error)){
-		session_start();
 		$_SESSION['username'] = $result[1];
 		session_write_close();
+
 		header("Location: index.php");
 		}
 	}
@@ -47,12 +67,16 @@ if(empty($error)){
 <em id=error><?php for($i=0;$i < count($error);$i++){ echo $error[$i]; } ?></em>
 <br>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-Email:<input type="email" maxlength="20" name="email" required/></br>
-Password:<input type="password" maxlength="10" name="password" required/></br>
+<b>We recommend, do not use your real name and email for privacy concerns.😇</b><br><br>
+Email:<input type="email" maxlength="20" name="email" placeholder="fake@email.com" required/></br>
+Password:<input id="pass" type="password" maxlength="10" name="password" placeholder="Password" required/>
+</br>Show Password:<input type="checkbox" id=ck>
 <br><input type="submit" name="submit" value="Login"/><br><br>
 Don't have an account, then <a href="register.php">create</a> one.
+<br>What is <a href="./about.php">Pbook</a> ?
 </form>
 </fieldset>
 <?php 
 mysqli_close($dbc);
-require_once("footer.html"); ?>
+require_once("footer.html");
+?>
