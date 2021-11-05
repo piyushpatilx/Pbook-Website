@@ -68,8 +68,7 @@ CREATE TABLE `Profile` (
 -- Dumping data for table `Profile`
 --
 
-INSERT INTO `Profile` (`Username`, `Birthdate`, `Gender`, `Relationship`, `Interest`, `Photo`) VALUES
-('Gamer Piyush', '2020-08-11', 'Male', 'None', 'Hacking..', '');
+
 
 -- --------------------------------------------------------
 
@@ -87,8 +86,7 @@ CREATE TABLE `Userdata` (
 -- Dumping data for table `Userdata`
 --
 
-INSERT INTO `Userdata` (`Username`, `Email`, `Password`) VALUES
-('Gamer Piyush', 'gamer@a.in', '1234');
+
 
 --
 -- Indexes for dumped tables
