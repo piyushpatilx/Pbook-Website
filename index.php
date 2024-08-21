@@ -43,14 +43,14 @@ if(!isset($_GET['submit'])){
 	$feed = mysqli_query($dbc, $f) or die("Error querying");
 	while($farray = mysqli_fetch_array($feed)){
 
-$lk = "SELECT `liked-by` FROM `Likes` WHERE `id` = '$farray[id]'";
+$lk = "SELECT `liked_by` FROM `Likes` WHERE `id` = '$farray[id]'";
 $lkq = mysqli_query($dbc, $lk);
 $lkr = mysqli_affected_rows($dbc);
 
 ?>
 <br>
 <fieldset id=pst>
-<em id=date >Posted by <a href="show-profile.php?name=<?php echo $farray['from']; ?>" ><?php echo $farray['from']; ?></a> At <?php echo $farray['date']; ?> </em>
+<em id=date >Posted by <a href="show-profile.php?name=<?php echo $farray['from_user']; ?>" ><?php echo $farray['from_user']; ?></a> At <?php echo $farray['date']; ?> </em>
 <br><hr></hr>
 <?php if(!empty($farray['photo'])){ ?>
 <img id=photo src='<?php echo $farray['photo']; ?>' height="250" width="250"><hr></hr>
@@ -62,7 +62,7 @@ $lkr = mysqli_affected_rows($dbc);
 <input id=like type="submit" value="Like" name="like-post"/>
 <?php echo "Likes: ".$lkr; ?>
 </form>
-<?php if($username == $farray['from']){
+<?php if($username == $farray['from_user']){
 	?>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 	<input type="hidden" name="post-id" value="<?php echo $farray['id']; ?>"/>
@@ -88,16 +88,16 @@ header("Location: index.php");
 if(isset($_POST['like-post'])){
 	$postid = $_POST['post-id'];
 	
-	$lq = "SELECT `liked-by` FROM `Likes` WHERE `id` = '$postid' AND `liked-by` = '$username'";
+	$lq = "SELECT `liked_by` FROM `Likes` WHERE `id` = '$postid' AND `liked_by` = '$username'";
 $clq = mysqli_query($dbc, $lq);
 $clk = mysqli_fetch_array($clq);
  if(empty($clk)){
-	$lq2 = "INSERT INTO `Likes`(`id`, `liked-by`) VALUES ('$postid', '$username')";
+	$lq2 = "INSERT INTO `Likes`(`id`, `liked_by`) VALUES ('$postid', '$username')";
 	mysqli_query($dbc ,$lq2);
 header("Location: index.php");
   }
  elseif(!empty($clk)){
-$lq3 = "DELETE FROM `Likes` WHERE `id` = '$postid' AND `liked-by` = '$username'";
+$lq3 = "DELETE FROM `Likes` WHERE `id` = '$postid' AND `liked_by` = '$username'";
 	mysqli_query($dbc ,$lq3);
 header("Location: index.php");
   }

@@ -29,10 +29,10 @@ if(empty($article)){
 if(empty($error)){
 	$date = date('M d Y h:i a');
 	if(empty($file)){
-	$query = "INSERT INTO `Posts`(`date`,`from`,`post`) VALUES('$date','$username','$article')";
+	$query = "INSERT INTO `Posts`(`date`,`from_user`,`post`) VALUES('$date','$username','$article')";
 	}
 	else {
-$query = "INSERT INTO `Posts`(`date`,`from`,`post`,`photo`) VALUES('$date','$username','$article','$uploadfile')";
+$query = "INSERT INTO `Posts`(`date`,`from_user`,`post`,`photo`) VALUES('$date','$username','$article','$uploadfile')";
 	}
 	$q = mysqli_query($dbc, $query) or die("Error querying database".mysqli_error($dbc));
 	mysqli_close($dbc);

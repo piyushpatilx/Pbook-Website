@@ -16,6 +16,10 @@ border-radius: 5px;
 	margin-left: 10px;
 }
 </style>
-<h3 id="foot"> Copyright&copy 2020, Pbook. All Rights Reserved.
-<a id="link" href="about.php">About Pbook</a></h3>
+<h3 id="foot"> Copyright <span id="year"></span>, Pbook. All Rights Reserved.
+	<a id="link" href="about.php">About Pbook</a></h3>
+	<script>
+		let currentYear = new Date().getFullYear();
+		document.getElementById('year').textContent = currentYear;
+	</script>
 <?php ob_end_flush(); ?>
